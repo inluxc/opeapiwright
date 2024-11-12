@@ -1,0 +1,37 @@
+import { expect, test } from "@playwright/test";
+import { StoreResponseDecoder } from "../interfaces/decoders";
+import { ErrorLog } from "../lib/error";
+import { JsonMarshal } from "../lib/json";
+
+test.describe("<%= operationId %>", () => {
+    <%_ tests.forEach(function(test){ -%>
+
+    test("Test Response <%= test.statusCode %>", {
+        tag: ["@[]"],
+    },
+    async ({ request }) => {
+        const url = "<%= test.path %>";
+    <%_ if (test.method == 'get') { _%>
+        const options = {}
+        const resp = await request.get(url);
+    <%_ } else if (test.method == 'post') { _%>
+        const options = {}
+        const resp = await request.post(url, options);
+    <%_ } else if (test.method == 'put') { _%>
+        const options = {}
+        const resp = await request.put(url, options);
+    <%_ } else if (test.method == 'delete') { _%>
+        const options = {}
+        const resp = await request.delete(url);
+    <%_ } _%>
+        const errorMsg = await ErrorLog(resp, options);
+        const jsonBody = await JsonMarshal(resp);
+
+        // Check response status code
+        expect(resp.status(), errorMsg).toBe(<%= test.statusCode %>);
+
+        // Check response body structure
+        }
+    );
+    <% }); %>
+});
