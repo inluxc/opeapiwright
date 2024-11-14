@@ -1,4 +1,4 @@
-# Openapiwright
+# WIP - Openapiwright
 
 ### Openapiwright is a tool to generate Playwright api test.
 
